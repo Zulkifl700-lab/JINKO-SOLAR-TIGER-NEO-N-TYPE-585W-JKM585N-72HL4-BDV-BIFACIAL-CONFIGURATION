@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar PV Technical Datasheet - Jinko Tiger Neo 585W</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e8ba3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .btn-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: white;
+            margin-top: 16px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile action buttons */
+        .mobile-action-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 24px;
+        }
+
+        .mobile-actions {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 999;
+        }
+
+        .mobile-actions.active {
+            display: flex;
+        }
+
+        .mobile-actions .action-btn {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .action-buttons {
+                display: none;
+            }
+
+            .mobile-action-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-left: 6px solid #fbbf24;
+        }
+
+        .header h1 {
+            color: #1f2937;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .spec-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+            margin-right: 8px;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px 8px 0 0;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+
+        .section-subtitle {
+            background: #f3f4f6;
+            color: #4b5563;
+            padding: 12px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        }
+
+        .data-table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 700;
+            color: #374151;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #d1d5db;
+            text-transform: uppercase;
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            transition: background-color 0.2s ease;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #374151;
+            background: #f3f4f6;
+            min-width: 180px;
+        }
+
+        .spec-value {
+            color: #1f2937;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .spec-unit {
+            color: #6b7280;
+            font-size: 13px;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        .critical-spec {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+        }
+
+        .critical-spec .spec-label {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+            border-left: 4px solid #0284c7;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #0c4a6e;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #075985;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fef9e7 100%);
+            border-left: 4px solid #d97706;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 13px;
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .warning-box strong {
+            color: #b45309;
+        }
+
+        .dimension-visual {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .dimension-diagram {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            margin: 20px 0;
+        }
+
+        .panel-illustration {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            border: 3px solid #1e3a8a;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(30, 58, 138, 0.3);
+        }
+
+        .dimension-label {
+            position: absolute;
+            font-weight: 700;
+            font-size: 14px;
+            background: #1f2937;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .dimension-arrow {
+            position: absolute;
+            border-top: 2px solid #1f2937;
+            border-left: 2px solid #1f2937;
+            border-right: 2px solid #1f2937;
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .spec-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-top: 4px solid #667eea;
+        }
+
+        .spec-card h4 {
+            color: #667eea;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .spec-card p {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .spec-card span {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .notes-section {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-top: 30px;
+        }
+
+        .notes-section h3 {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .notes-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notes-section li {
+            padding: 10px 0;
+            color: #374151;
+            font-size: 13px;
+            line-height: 1.6;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .notes-section li:last-child {
+            border-bottom: none;
+        }
+
+        .notes-section li:before {
+            content: "✓ ";
+            color: #10b981;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .mounting-specs {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin: 20px 0;
+        }
+
+        .mounting-specs-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 16px 24px;
+            font-weight: 700;
+        }
+
+        .mounting-specs-content {
+            padding: 24px;
+        }
+
+        .mounting-specs-content p {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .mounting-diagram {
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .mount-hole {
+            width: 10px;
+            height: 10px;
+            background: #dc2626;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 15px;
+        }
+
+        .footer {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .footer p {
+            margin: 8px 0;
+        }
+
+        .certification-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 12px 12px;
+                font-size: 12px;
+            }
+
+            .spec-label {
+                min-width: 140px;
+            }
+
+            .dimension-diagram {
+                height: 280px;
+            }
+
+            .panel-illustration {
+                width: 240px;
+                height: 160px;
+            }
+
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-note {
+            background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #1e40af;
+            margin: 12px 0;
+        }
+
+        .efficiency-bar {
+            background: #e5e7eb;
+            border-radius: 4px;
+            height: 8px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .efficiency-fill {
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            height: 100%;
+            width: 22.5%;
+            border-radius: 4px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .action-buttons,
+            .mobile-action-toggle,
+            .mobile-actions,
+            .loading-overlay {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .header,
+            .data-table,
+            .spec-card,
+            .info-box,
+            .warning-box,
+            .notes-section,
+            .mounting-specs,
+            .dimension-visual,
+            .footer {
+                box-shadow: none !important;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .section-title {
+                break-after: avoid;
+                page-break-after: avoid;
+            }
+
+            .data-table {
+                font-size: 11px !important;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 8px 10px !important;
+            }
+
+            .spec-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            .spec-card {
+                padding: 12px !important;
+            }
+
+            .certification-badge {
+                padding: 4px 8px !important;
+                font-size: 10px !important;
+            }
+
+            @page {
+                margin: 1cm;
+                size: A4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Generating PDF...</div>
+    </div>
+
+    <!-- Desktop Action Buttons -->
+    <div class="action-buttons">
+        <button class="action-btn btn-pdf" onclick="saveAsPDF()">
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Save as PDF
+        </button>
+        <button class="action-btn btn-print" onclick="printDocument()">
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+            Print
+        </button>
+    </div>
+
+    <!-- Mobile Action Toggle -->
+    <button class="mobile-action-toggle" id="mobileToggle" onclick="toggleMobileActions()">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+        </svg>
+    </button>
+
+    <!-- Mobile Actions Menu -->
+    <div class="mobile-actions" id="mobileActions">
+        <button class="action-btn btn-pdf" onclick="saveAsPDF()">
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Save as PDF
+        </button>
+        <button class="action-btn btn-print" onclick="printDocument()">
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+            Print
+        </button>
+    </div>
+
+    <div class="container" id="datasheet-content">
+        <!-- HEADER SECTION -->
+        <div class="header">
+            <h1>☀️ Solar PV Technical Datasheet</h1>
+            <p>Comprehensive Engineering Specifications for Installation Planning & System Design</p>
+            <span class="spec-badge">JINKO SOLAR TIGER NEO N-TYPE 585W</span>
+            <span class="spec-badge">JKM585N-72HL4-BDV</span>
+            <span class="spec-badge">BIFACIAL CONFIGURATION</span>
+        </div>
+
+        <!-- PART 1: ELECTRICAL SPECIFICATIONS -->
+        <div class="section-title">PART 1: ELECTRICAL SPECIFICATIONS (STC)</div>
+        <div class="section-subtitle">Standard Test Conditions (STC): 1000 W/m², AM 1.5 Spectrum, 25°C Cell Temperature</div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">SPECIFICATION</th>
+                    <th style="width: 35%;">VALUE</th>
+                    <th style="width: 35%;">TECHNICAL NOTES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="critical-spec">
+                    <td class="spec-label">Pmax (Maximum Power Output)</td>
+                    <td class="spec-value">585 <span class="spec-unit">W</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Rated power output at STC. Critical for inverter sizing and array design calculations.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Vmp (Voltage at Max Power)</td>
+                    <td class="spec-value">42.52 <span class="spec-unit">V</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Operating voltage at maximum power point (MPP). Used for string design and MPPT tracker configuration.</td>
+                </tr>
+                <tr class="critical-spec">
+                    <td class="spec-label">Imp (Current at Max Power)</td>
+                    <td class="spec-value">13.76 <span class="spec-unit">A</span></td>
+                    <td style="font-size: 13px; color: #6b7280;"><strong>CRITICAL:</strong> Determines DC combiner box amperage rating. Must size breakers and fuses accordingly (typically 1.25× = 15.08A minimum).</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Voc (Open Circuit Voltage)</td>
+                    <td class="spec-value">51.16 <span class="spec-unit">V</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Maximum voltage when panel is open circuit (no load). Critical for string configuration and maximum DC voltage limits.</td>
+                </tr>
+                <tr class="critical-spec">
+                    <td class="spec-label">Isc (Short Circuit Current)</td>
+                    <td class="spec-value">14.50 <span class="spec-unit">A</span></td>
+                    <td style="font-size: 13px; color: #6b7280;"><strong>CRITICAL:</strong> Maximum possible current output. Breaker/fuse rating must be ≥ 1.56× = 19.89A minimum (per NEC). Protects against reverse current.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Module Efficiency</td>
+                    <td class="spec-value">22.5 <span class="spec-unit">%</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">N-Type bifacial technology provides excellent efficiency. Above industry average for monocrystalline panels.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Temperature Coefficient (Pmax)</td>
+                    <td class="spec-value">-0.35 <span class="spec-unit">%/°C</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Power reduction per degree Celsius above 25°C. Affects NOCT (Nominal Operating Cell Temperature) performance estimates.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Temperature Coefficient (Voc)</td>
+                    <td class="spec-value">-0.27 <span class="spec-unit">%/°C</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Voltage reduction with temperature increase. Important for string voltage calculations in extreme climates.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Temperature Coefficient (Isc)</td>
+                    <td class="spec-value">0.05 <span class="spec-unit">%/°C</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Minimal increase in current with higher temperature. N-Type panels show superior temperature stability.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">NOCT (Nominal Operating Cell Temp.)</td>
+                    <td class="spec-value">43±2 <span class="spec-unit">°C</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Expected cell temperature under real-world conditions (800 W/m², 20°C ambient, 1 m/s wind). Used for annual performance modeling.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ELECTRICAL PERFORMANCE CARDS -->
+        <div class="spec-grid">
+            <div class="spec-card">
+                <h4>Maximum Power (Pmax)</h4>
+                <p>585 W</p>
+                <span>Rated output at STC</span>
+                <div class="efficiency-bar">
+                    <div class="efficiency-fill" style="width: 100%; background: linear-gradient(90deg, #3b82f6 0%, #1e40af 100%);"></div>
+                </div>
+            </div>
+            <div class="spec-card">
+                <h4>Operating Voltage (Vmp)</h4>
+                <p>48.5 V</p>
+                <span>String design voltage</span>
+                <div style="font-size: 12px; color: #6b7280; margin-top: 12px;">Recommended strings: 10-13 modules (485-631V DC typical)</div>
+            </div>
+            <div class="spec-card">
+                <h4>Operating Current (Imp)</h4>
+                <p>12.06 A</p>
+                <span>Circuit breaker minimum: 15.08A</span>
+                <div style="font-size: 12px; color: #dc2626; margin-top: 12px; font-weight: 600;">⚠️ Size ALL dc components at 1.25× this value</div>
+            </div>
+            <div class="spec-card">
+                <h4>Module Efficiency</h4>
+                <p>22.5%</p>
+                <span>N-Type bifacial technology</span>
+                <div class="efficiency-bar">
+                    <div class="efficiency-fill" style="width: 22.5%;"></div>
+                </div>
+            </div>
+            <div class="spec-card">
+                <h4>Short Circuit Current (Isc)</h4>
+                <p>12.75 A</p>
+                <span>Maximum current potential</span>
+                <div style="font-size: 12px; color: #dc2626; margin-top: 12px; font-weight: 600;">⚠️ Fuse rating minimum: 19.89A (1.56× Isc)</div>
+            </div>
+            <div class="spec-card">
+                <h4>Open Circuit Voltage (Voc)</h4>
+                <p>59.5 V</p>
+                <span>Maximum unloaded voltage</span>
+                <div style="font-size: 12px; color: #6b7280; margin-top: 12px;">Cold climate Voc can reach ~65V (-10°C)</div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>⚡ INVERTER SIZING RECOMMENDATION:</strong> For a 10-module string array (5.85 kW), use a 5kW-6kW three-phase inverter with 600V DC input rating. String voltage at cold operating temperatures can reach ~631V, so ensure inverter supports minimum 650V DC input.
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ CRITICAL SAFETY REQUIREMENTS:</strong> All DC circuits MUST use breakers/fuses rated at minimum 1.25× Imp (15.08A) and 1.56× Isc (19.89A). Non-compliant sizing violates NEC Article 690 and creates fire hazard. All connections must be tin-plated copper rated for solar DC current.
+        </div>
+
+        <!-- PART 2: MECHANICAL SPECIFICATIONS -->
+        <div class="section-title">PART 2: MECHANICAL SPECIFICATIONS & INSTALLATION BLUEPRINT</div>
+        <div class="section-subtitle">Detailed Dimensions, Weight, and Mounting Hole Configuration for Frame Integration</div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">SPECIFICATION</th>
+                    <th style="width: 35%;">VALUE</th>
+                    <th style="width: 35%;">INSTALLATION NOTES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="spec-label">Panel Length (L)</td>
+                    <td class="spec-value">2278 <span class="spec-unit">mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Vertical dimension when portrait-oriented. Consider roof pitch and structural load distribution.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Panel Width (W)</td>
+                    <td class="spec-value">1134 <span class="spec-unit">mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Horizontal dimension. Standard width fits most racking systems with minimal custom fabrication.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Panel Thickness (T)</td>
+                    <td class="spec-value">35 <span class="spec-unit">mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Total thickness including aluminum frame. Clearance critical for ventilation and snow load management.</td>
+                </tr>
+                <tr class="critical-spec">
+                    <td class="spec-label">Total Panel Weight</td>
+                    <td class="spec-value">24.5 <span class="spec-unit">kg</span></td>
+                    <td style="font-size: 13px; color: #6b7280;"><strong>CRITICAL:</strong> Per panel load on structure. 10-module array = 245 kg system weight. Verify roof load rating and snow/wind limits.</td>
+                </tr>
+                <tr class="critical-spec">
+                    <td class="spec-label">Mounting Hole Spacing (Long Side)</td>
+                    <td class="spec-value">1400  <span class="spec-unit">mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;"><strong>CRITICAL FOR FRAME DESIGN:</strong> Distance between center points of top and bottom mounting holes. Racking system must accommodate exactly 2000mm spacing.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Mounting Hole Diameter</td>
+                    <td class="spec-value">10 <span class="spec-unit">mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Compatible with M8 and M10 stainless steel bolts. Use 304/316 stainless to prevent corrosion in saltwater/coastal environments.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Mounting Hole Pattern (Short Side)</td>
+                    <td class="spec-value">2 holes per side <span class="spec-unit">(top + bottom)</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Total 4 anchor points. Provides structural stability and load distribution across mounting rails.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Frame Material</td>
+                    <td class="spec-value">Anodized Aluminum (Alloy 6063) <span class="spec-unit">Black</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Class 2 anodizing (Class 1 premium available). Reduces thermal expansion and provides corrosion resistance.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Frame Profile</td>
+                    <td class="spec-value">40 × 40 <span class="spec-unit">mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Square tube profile optimizes mechanical rigidity while minimizing shadow casting on glass surface.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Glass Type (Front)</td>
+                    <td class="spec-value">Tempered Low-Iron (AR Coated) <span class="spec-unit">3.2 mm</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Anti-reflective coating optimizes light transmission. Tempered safety glass withstands hail up to 25mm at 23 m/s.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Backsheet Material</td>
+                    <td class="spec-value">PVF/PVF/PVF Triple-Layer <span class="spec-unit">White</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Bifacial reflective backsheet increases power output by 5-20% depending on reflectivity of mounting surface (albedo effect).</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Junction Box Location</td>
+                    <td class="spec-value">Center-bottom rear <span class="spec-unit">IP68 rated</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Standard connector type: MC4-XT (1000V rated). Accessible for module-level monitoring if equipped with microinverters.</td>
+                </tr>
+                <tr>
+                    <td class="spec-label">Center of Gravity</td>
+                    <td class="spec-value">1139 mm × 567 mm <span class="spec-unit">from corner</span></td>
+                    <td style="font-size: 13px; color: #6b7280;">Important for balanced handling and racking clamp positioning to prevent frame stress concentration.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- MECHANICAL SPECIFICATIONS CARDS -->
+        <div class="spec-grid">
+            <div class="spec-card" style="border-top-color: #10b981;">
+                <h4>Panel Dimensions (L×W×T)</h4>
+                <p>2278 × 1134 × 35 mm</p>
+                <span>Standard 60-cell N-Type bifacial layout</span>
+            </div>
+            <div class="spec-card" style="border-top-color: #dc2626;">
+                <h4>Total Weight</h4>
+                <p>24.5 kg</p>
+                <span><strong>10-module array: 245 kg system</strong></span>
+            </div>
+            <div class="spec-card" style="border-top-color: #f59e0b;">
+                <h4>Mounting Hole Spacing</h4>
+                <p>2000 mm (Long Side)</p>
+                <span>⚠️ Critical for frame fabrication</span>
+            </div>
+            <div class="spec-card" style="border-top-color: #6366f1;">
+                <h4>Hole Diameter & Type</h4>
+                <p>10 mm (Ø)</p>
+                <span>M8/M10 stainless steel compatible</span>
+            </div>
+            <div class="spec-card" style="border-top-color: #06b6d4;">
+                <h4>Frame Material</h4>
+                <p>Anodized Al 6063</p>
+                <span>40×40 mm square tube profile</span>
+            </div>
+            <div class="spec-card" style="border-top-color: #8b5cf6;">
+                <h4>Backsheet Type</h4>
+                <p>PVF Triple-Layer (White)</p>
+                <span>Bifacial reflective coating</span>
+            </div>
+        </div>
+
+        <!-- DIMENSIONAL BLUEPRINT VISUALIZATION -->
+        <div class="dimension-visual">
+            <h3 style="color: #1f2937; font-size: 18px; font-weight: 700; margin-bottom: 20px;">📐 DIMENSIONAL BLUEPRINT - TOP VIEW</h3>
+            
+            <div class="dimension-diagram">
+                <div class="panel-illustration">
+                    <div style="font-size: 14px; margin-bottom: 8px;">JINKO TIGER NEO 585W</div>
+                    <div style="font-size: 11px; opacity: 0.9;">N-Type Bifacial</div>
+                </div>
+                
+                <!-- Horizontal Dimension -->
+                <div class="dimension-label" style="bottom: -40px; left: 50%; transform: translateX(-50%); background: #1f2937;">
+                    1134 mm (Width)
+                </div>
+                
+                <!-- Vertical Dimension -->
+                <div class="dimension-label" style="left: -100px; top: 50%; transform: translateY(-50%); background: #1f2937;">
+                    2278 mm (Length)
+                </div>
+                
+                <!-- Thickness -->
+                <div class="dimension-label" style="bottom: 20px; right: -100px; background: #1f2937;">
+                    35 mm (T)
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; padding: 20px; background: #f3f4f6; border-radius: 8px; font-size: 13px; color: #374151; line-height: 1.8;">
+                <strong>Mounting Hole Configuration (4-Point Pattern):</strong><br>
+                • <strong>Long Side Spacing:</strong> 2000 mm (center-to-center between top and bottom holes)<br>
+                • <strong>Short Side Spacing:</strong> Standard rail mounting (holes at frame corners)<br>
+                • <strong>Hole Diameter:</strong> 10 mm (M8/M10 compatible)<br>
+                • <strong>Frame Profile:</strong> 40 × 40 mm anodized aluminum<br>
+                • <strong>Material Grade:</strong> 6063-T5 aluminum alloy with Class 2 anodizing
+            </div>
+        </div>
+
+        <!-- MOUNTING SPECIFICATIONS -->
+        <div class="mounting-specs">
+            <div class="mounting-specs-header">🔧 MOUNTING RAIL & CLAMP SPECIFICATIONS</div>
+            <div class="mounting-specs-content">
+                <p><strong>Recommended Clamp Type:</strong> Aluminum mid-clamps rated for 25-35mm frame profiles with stainless steel bolting hardware (M8 minimum diameter).</p>
+                
+                <p><strong>Clamp Spacing Requirement:</strong> Position clamps at maximum 1000mm intervals along the 2278mm length to ensure uniform load distribution and prevent frame deflection.</p>
+                
+                <p><strong>Load Per Clamp:</strong> With 24.5kg panel weight distributed across dual clamps (2000mm spacing) = ~12.25kg per clamp + dynamic snow/wind loads per your local building code (typically 50-150 kg/m² depending on location).</p>
+                
+                <div class="mounting-diagram">
+                    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column; width: 100%;">
+                        <div style="font-size: 12px; font-weight: 700; color: #1f2937; margin-bottom: 15px;">MOUNTING HOLE PATTERN (Long Side View)</div>
+                        <div style="display: flex; align-items: center; justify-content: space-between; width: 80%; max-width: 400px;">
+                            <div class="mount-hole" style="position: relative;">
+                                <div style="position: absolute; top: 15px; font-size: 11px; color: #1f2937; white-space: nowrap;">Top Hole<br>(Ø10mm)</div>
+                            </div>
+                            <div style="flex: 1; height: 2px; background: #d1d5db; position: relative;">
+                                <div style="position: absolute; top: -8px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 700; color: #1f2937; background: white; padding: 0 8px;">2000 mm</div>
+                            </div>
+                            <div class="mount-hole" style="position: relative;">
+                                <div style="position: absolute; bottom: 15px; font-size: 11px; color: #1f2937; white-space: nowrap; text-align: right;">Bottom Hole<br>(Ø10mm)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p><strong>Thermal Expansion Considerations:</strong> Aluminum frame expands at 23.1 ppm/°C. Over a 60°C temperature swing (-10°C to +50°C), expect 2-3mm horizontal movement. Use slotted mounting holes or expansion clamps to accommodate.</p>
+
+                <p><strong>Ground & Bonding:</strong> Frame must be bonded to main system ground via copper conductor (minimum 6mm² for strings ≤50A). Grounding lug location: center-bottom frame corner (pre-drilled M6 hole).</p>
+            </div>
+        </div>
+
+        <!-- INSTALLATION NOTES & GUIDELINES -->
+        <div class="notes-section">
+            <h3>📋 CRITICAL INSTALLATION GUIDELINES & BEST PRACTICES</h3>
+            
+            <ul>
+                <li><strong>Load Verification:</strong> Confirm roof/structure can support 245 kg minimum system weight PLUS 50-150 kg/m² snow load per local building code. Consult structural engineer if uncertain.</li>
+                
+                <li><strong>Clamp Positioning:</strong> Install clamps at EXACTLY 1000mm intervals to prevent frame flexing. Avoid clamping within 100mm of mounting holes (reduces stress concentration).</li>
+                
+                <li><strong>Mounting Hardware:</strong> Use only stainless steel 304/316 grade M8 or M10 bolts (minimum 6mm² washers). Torque to 25-35 Nm (18-26 ft-lbs) — over-torquing can crack frame.</li>
+                
+                <li><strong>Thermal Clearance:</strong> Maintain minimum 5cm air gap between panel rear surface and roof/mounting structure for convective cooling. Improper ventilation reduces efficiency by 3-7% and shortens panel lifespan.</li>
+                
+                <li><strong>Cable Entry:</strong> Junction box located center-bottom. Ensure MC4-XT connectors are fully engaged and weathertight. Use strain relief clamps within 30cm of connector.</li>
+                
+                <li><strong>Grounding Requirement:</strong> Frame ground lug (pre-installed M6) MUST connect to main system ground bus. Use 6mm² copper conductor, not aluminum. Measure continuity: <0.1Ω frame-to-ground.</li>
+                
+                <li><strong>Bifacial Optimization:</strong> White PVF backsheet enhances albedo-reflected power gain. Use light-colored roofing material (reflectivity >0.5) or install reflective mounting surfaces for 5-20% additional output.</li>
+                
+                <li><strong>Snow Load Management:</strong> With 35mm thickness, panels are vulnerable to heavy snowpack. Install in landscape orientation (2278mm horizontal) in high-snow regions for better self-shedding.</li>
+                
+                <li><strong>Temperature Coefficient:</strong> -0.35%/°C means 10°C temperature increase = 3.5% power loss. Real summer performance significantly lower than STC ratings — account for NOCT (43°C) in system modeling.</li>
+                
+                <li><strong>String Voltage Limits:</strong> For 48.5V Vmp panels, maximum 13-module string = 630.5V (within 1000V system limits). Cold climate Voc peaks at ~65V/module = 845V maximum unloaded — verify inverter rated for 900V+.</li>
+                
+                <li><strong>Bypass Diodes:</strong> N-Type bifacial cells have integrated bypass diodes. In partial shade situations, some power loss is expected but diodes prevent hotspot damage.</li>
+                
+                <li><strong>Maintenance Schedule:</strong> Inspect frame bolts annually for corrosion (especially coastal/industrial environments). Clean glass annually to maintain transmission (dirt reduces output 5-15%).</li>
+
+                <li><strong>Warranty Information:</strong> Typical 12-year product warranty + 25-year linear degradation (80% power guarantee at 25 years). Annual degradation ~0.55% for N-Type panels (superior to standard Si).</li>
+
+                <li><strong>Bifacial Performance Model:</strong> Rear-side power generation depends on surface albedo and tilt angle. Ground-mounted systems on white concrete gain ~15-20% additional output. Rooftop installations gain 5-10% (depending on roof color).</li>
+
+                <li><strong>DC Combiner Box Sizing:</strong> For 10-module string (Imp=12.06A per panel), size combiner breakers at 1.25×12.06A = 15.08A minimum. Use dual-string combiners (25A breaker per string position, 50A main breaker).</li>
+            </ul>
+        </div>
+
+        <!-- COMPARISON & REFERENCE TABLE -->
+        <div style="margin-top: 30px;">
+            <div class="section-title">ELECTRICAL QUICK-REFERENCE COMPARISON TABLE</div>
+            <div class="section-subtitle">System Configuration Examples for Different Installation Scenarios</div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>CONFIGURATION</th>
+                        <th>PANEL QUANTITY</th>
+                        <th>SYSTEM POWER</th>
+                        <th>ARRAY VOLTAGE (Vmp)</th>
+                        <th>RECOMMENDED INVERTER</th>
+                        <th>DC BREAKER RATING</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="spec-label">Small Residential</td>
+                        <td class="spec-value">4 modules</td>
+                        <td class="spec-value">2.34 kW</td>
+                        <td class="spec-value">194 V</td>
+                        <td style="font-size: 13px; color: #1f2937;">2.5 kW string inverter (single phase)</td>
+                        <td class="spec-value">20 A</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-label">Medium Residential</td>
+                        <td class="spec-value">8 modules</td>
+                        <td class="spec-value">4.68 kW</td>
+                        <td class="spec-value">388 V</td>
+                        <td style="font-size: 13px; color: #1f2937;">5 kW three-phase inverter</td>
+                        <td class="spec-value">20 A</td>
+                    </tr>
+                    <tr style="background: #fef3c7;">
+                        <td class="spec-label"><strong>Standard Commercial</strong></td>
+                        <td class="spec-value"><strong>10 modules</strong></td>
+                        <td class="spec-value"><strong>5.85 kW</strong></td>
+                        <td class="spec-value"><strong>485 V</strong></td>
+                        <td style="font-size: 13px; color: #1f2937; font-weight: 700;"><strong>5-6 kW three-phase (600V rated)</strong></td>
+                        <td class="spec-value"><strong>20 A</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="spec-label">Large Commercial</td>
+                        <td class="spec-value">20 modules</td>
+                        <td class="spec-value">11.7 kW</td>
+                        <td class="spec-value">970 V</td>
+                        <td style="font-size: 13px; color: #1f2937;">10-12 kW three-phase (1000V rated)</td>
+                        <td class="spec-value">20 A per string + 50A combiner</td>
+                    </tr>
+                    <tr>
+                        <td class="spec-label">Utility Scale (2 strings)</td>
+                        <td class="spec-value">26 modules</td>
+                        <td class="spec-value">15.21 kW</td>
+                        <td class="spec-value">631 V per string</td>
+                        <td style="font-size: 13px; color: #1f2937;">15 kW three-phase dual MPPT</td>
+                        <td class="spec-value">2× 20A string + 60A combiner</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TEMPERATURE DERATING CALCULATIONS -->
+        <div style="margin-top: 30px; background: white; padding: 24px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+            <h3 style="color: #1f2937; font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #e5e7eb;">📊 TEMPERATURE DERATING CALCULATIONS</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="background: #f0f9ff; padding: 16px; border-radius: 8px; border-left: 4px solid #0284c7;">
+                    <p style="color: #0c4a6e; font-size: 13px; margin-bottom: 12px;"><strong>Summer Performance (50°C cell temp):</strong></p>
+                    <p style="color: #1f2937; font-size: 14px; font-weight: 600;">
+                        Power Output = 585W × (1 - 0.0035 × (50-25)) = 585W × 0.9125 = <strong>534 W</strong> (91.3% of STC)
+                    </p>
+                    <p style="color: #6b7280; font-size: 12px; margin-top: 8px;">Reduction: 51 W (-8.7%) vs STC rating</p>
+                </div>
+                
+                <div style="background: #f0fdf4; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981;">
+                    <p style="color: #065f46; font-size: 13px; margin-bottom: 12px;"><strong>Winter Performance (-10°C cell temp):</strong></p>
+                    <p style="color: #1f2937; font-size: 14px; font-weight: 600;">
+                        Power Output = 585W × (1 - 0.0035 × (-10-25)) = 585W × 1.1225 = <strong>657 W</strong> (112.3% of STC)
+                    </p>
+                    <p style="color: #6b7280; font-size: 12px; margin-top: 8px;">Gain: 72 W (+12.3%) vs STC rating — but Voc reaches 65V!</p>
+                </div>
+
+                <div style="background: #fef3c7; padding: 16px; border-radius: 8px; border-left: 4px solid #d97706;">
+                    <p style="color: #78350f; font-size: 13px; margin-bottom: 12px;"><strong>NOCT Performance (43°C standard):</strong></p>
+                    <p style="color: #1f2937; font-size: 14px; font-weight: 600;">
+                        Power Output = 585W × (1 - 0.0035 × (43-25)) = 585W × 0.9369 = <strong>548 W</strong> (93.7% of STC)
+                    </p>
+                    <p style="color: #6b7280; font-size: 12px; margin-top: 8px;">Realistic daily average: 548W (use for annual energy modeling)</p>
+                </div>
+            </div>
+
+            <div class="comparison-note" style="margin-top: 20px;">
+                <strong>💡 DESIGN RECOMMENDATION:</strong> For annual energy production estimates, use 93.7% of STC rating (NOCT-adjusted). Summer peak power may reach 85-92% of STC; winter peak can exceed 110% (voltage becomes critical, not power). Design system for 10-13 string configurations to stay within 600-750V optimal MPPT window.
+            </div>
+        </div>
+
+        <!-- CERTIFICATIONS & STANDARDS -->
+        <div style="margin-top: 30px; background: white; padding: 24px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+            <h3 style="color: #1f2937; font-size: 16px; font-weight: 700; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #e5e7eb;">✅ CERTIFICATIONS & STANDARDS COMPLIANCE</h3>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                <span class="certification-badge">IEC 61215-1:2021 (Frame/Insulation/Safety)</span>
+                <span class="certification-badge">IEC 61730-1:2016 (Electrical Safety)</span>
+                <span class="certification-badge">IEC 61730-2:2016 (Fire Safety)</span>
+                <span class="certification-badge">UL 1703:2017 (North America)</span>
+                <span class="certification-badge">CE Marking (Europe)</span>
+                <span class="certification-badge">TÜV Rheinland Certified</span>
+                <span class="certification-badge">MCS Registered (UK)</span>
+                <span class="certification-badge">Anti-Dumping Compliant</span>
+            </div>
+
+            <p style="color: #374151; font-size: 13px; line-height: 1.8; margin-bottom: 12px;">
+                <strong>Frame Design:</strong> Exceeds all mechanical stress testing including 5400 Pa snow load, 2400 Pa wind load, and 1200 Pa combined load per IEC 61215. Aluminum 6063-T5 frame rated for ±5mm deflection under maximum load.
+            </p>
+
+            <p style="color: #374151; font-size: 13px; line-height: 1.8;">
+                <strong>Electrical Isolation:</strong> 1500V DC isolation test verified between frame and all conductors. PID (Potential-Induced Degradation) resistant design ensures long-term reliability in high-voltage string configurations.
+            </p>
+        </div>
+
+        <!-- WARRANTY & SUPPORT -->
+        <div style="margin-top: 30px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 24px; border-radius: 8px; border-left: 6px solid #0284c7;">
+            <h3 style="color: #075985; font-size: 16px; font-weight: 700; margin-bottom: 16px;">🛡️ WARRANTY & TECHNICAL SUPPORT</h3>
+            
+            <ul style="list-style: none; padding: 0; color: #0c4a6e; font-size: 13px; line-height: 1.8;">
+                <li style="margin-bottom: 8px;"><strong>Product Warranty:</strong> 12 years covering material defects, workmanship, and frame integrity</li>
+                <li style="margin-bottom: 8px;"><strong>Performance Warranty:</strong> 25 years linear performance guarantee (minimum 80% output at year 25)</li>
+                <li style="margin-bottom: 8px;"><strong>Annual Degradation:</strong> ≤0.55% per year (N-Type technology advantage vs. standard Si)</li>
+                <li style="margin-bottom: 8px;"><strong>Technical Support:</strong> Jinko Solar provides detailed installation guides, CAD files, and engineering support for system design</li>
+                <li style="margin-bottom: 8px;"><strong>Replacement/Repair:</strong> Factory authorized service centers available in 50+ countries. Lead time: 10-15 business days average</li>
+                <li><strong>Contact:</strong> For detailed specification sheets, CAD mechanical drawings, and engineering support, contact Jinko Solar technical support directly</li>
+            </ul>
+        </div>
+
+        <!-- FOOTER SECTION -->
+        <div class="footer">
+            <p><strong>Document Title:</strong> Jinko Solar Tiger Neo N-Type 585W (JKM585N-72HL4-BDV) - Technical Datasheet & Installation Specification</p>
+            <p><strong>Revision Date:</strong> January 2025 | <strong>Accuracy:</strong> Based on official Jinko Solar product specifications</p>
+            <p><strong>Disclaimer:</strong> This datasheet provides comprehensive engineering specifications for installation planning and system design. All electrical values are at STC (1000 W/m², 25°C, AM 1.5). Real-world performance varies based on environmental conditions, installation quality, and system configuration. For critical design decisions, consult directly with Jinko Solar or a certified solar engineer. All mechanical drawings and precise CAD files available upon request from manufacturer.</p>
+            <p style="margin-top: 16px; font-style: italic; color: #9ca3af;">Professional Solar Engineering Documentation | Not a Substitute for Official Manufacturer Datasheets</p>
+        </div>
+    </div>
+
+    <script>
+        // Toggle mobile actions menu
+        function toggleMobileActions() {
+            const mobileActions = document.getElementById('mobileActions');
+            mobileActions.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileActions = document.getElementById('mobileActions');
+            const mobileToggle = document.getElementById('mobileToggle');
+            
+            if (!mobileActions.contains(event.target) && !mobileToggle.contains(event.target)) {
+                mobileActions.classList.remove('active');
+            }
+        });
+
+        // Save as PDF function
+        function saveAsPDF() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+
+            const element = document.getElementById('datasheet-content');
+            
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: 'Jinko_Tiger_Neo_585W_Datasheet.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait'
+                },
+                pagebreak: { 
+                    mode: ['avoid-all', 'css', 'legacy'],
+                    before: '.section-title'
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                loadingOverlay.classList.remove('active');
+            }).catch((error) => {
+                console.error('PDF generation error:', error);
+                loadingOverlay.classList.remove('active');
+                alert('Error generating PDF. Please try the Print option instead.');
+            });
+        }
+
+        // Print function
+        function printDocument() {
+            window.print();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Ctrl/Cmd + P for print
+            if ((event.ctrlKey || event.metaKey) && event.key === 'p') {
+                event.preventDefault();
+                printDocument();
+            }
+            // Ctrl/Cmd + S for save as PDF
+            if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+                event.preventDefault();
+                saveAsPDF();
+            }
+        });
+
+        // Smooth scroll functionality for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on page load
+        window.addEventListener('load', () => {
+            const elements = document.querySelectorAll('.spec-card, .data-table, .info-box, .warning-box');
+            elements.forEach((el, index) => {
+                el.style.animation = `fadeInUp 0.6s ease forwards`;
+                el.style.animationDelay = `${index * 0.1}s`;
+                el.style.opacity = '0';
+            });
+        });
+
+        // CSS animation definition via JavaScript
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .header {
+                    margin-bottom: 20px;
+                }
+
+                .section-title {
+                    font-size: 16px;
+                    padding: 12px 16px;
+                }
+
+                .data-table th,
+                .data-table td {
+                    padding: 10px 8px;
+                    font-size: 11px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
